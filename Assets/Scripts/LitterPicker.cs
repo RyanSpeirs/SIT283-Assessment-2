@@ -1,13 +1,11 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-// Goes on a grabbable tool that has an XR Grab Interactable.
-// In the interactable's events, hook:  Activated -> OnActivated()   and   Deactivated -> OnDeactivated()
-// No physics simulation: the nearest item near the tip is made kinematic and parented to the tip.
+// Goes on a grabbing tool that has an XR Grab Interactable component.
 public class LitterPicker : MonoBehaviour
 {
     [SerializeField] private Transform tip;
-    [SerializeField] private float pickRadius = 0.12f;
+    [SerializeField] private float pickRadius = 0.15f;
 
     [Tooltip("On: press once to close, press again to release. Off: hold the trigger to keep hold.")]
     [SerializeField] private bool toggleMode = true;
@@ -18,12 +16,21 @@ public class LitterPicker : MonoBehaviour
     [SerializeField] private float openAngle = 25f;
     [SerializeField] private float closedAngle = 2f;
     [SerializeField] private float jawSpeed = 8f;
+    [SerializeField] private Vector3 jawAxis = Vector3.forward;   // the hinge axis in each jaw's own space
+    private Quaternion restA, restB;
 
     private Item held;
     private bool closed;
 
     public UnityEvent<Transform> OnItemHeld;
     public UnityEvent<Transform> OnItemReleased;
+
+    void Awake()
+    {
+        if (jawA != null) restA = jawA.localRotation;
+        if (jawB != null) restB = jawB.localRotation;
+    }
+
 
     public void OnActivated()
     {
@@ -38,7 +45,6 @@ public class LitterPicker : MonoBehaviour
 
     void Update()
     {
-        // The bin can take the item away (destroy or eject), so drop our reference if it is no longer on the tip
         if (held != null && held.transform.parent != tip)
         {
             OnItemReleased?.Invoke(held.transform);
@@ -46,9 +52,10 @@ public class LitterPicker : MonoBehaviour
         }
 
         float angle = closed ? closedAngle : openAngle;
-        RotateJaw(jawA, angle);
-        RotateJaw(jawB, -angle);
+        RotateJaw(jawA, restA, angle);
+        RotateJaw(jawB, restB, -angle);
     }
+
 
     private void Grip()
     {
@@ -92,10 +99,17 @@ public class LitterPicker : MonoBehaviour
         held = null;
     }
 
-    private void RotateJaw(Transform jaw, float angle)
+    private void RotateJaw(Transform jaw, Quaternion rest, float angle)
     {
         if (jaw == null) return;
-        Quaternion target = Quaternion.Euler(0f, 0f, angle);   // change the axis to match your model
+        Quaternion target = rest * Quaternion.AngleAxis(angle, jawAxis);
         jaw.localRotation = Quaternion.Slerp(jaw.localRotation, target, Time.deltaTime * jawSpeed);
     }
+
+    void OnDrawGizmosSelected()
+    {
+        if (tip != null) Gizmos.DrawWireSphere(tip.position, pickRadius);
+    }
+
+
 }
