@@ -95,6 +95,7 @@ private readonly List<Transform> pickerHeld = new List<Transform>();
         }
     }
 
+    // when we change whatis held we need call this to update
     private bool HeldObjectsChanged()
     {
         if (held.Count != previousHeld.Count)
@@ -109,6 +110,7 @@ private readonly List<Transform> pickerHeld = new List<Transform>();
         return false;
     }
 
+    // the name of things we hold is shown here
     private string HeldNames()
     {
         List<string> names = new List<string>();
@@ -122,6 +124,7 @@ private readonly List<Transform> pickerHeld = new List<Transform>();
         return names.Count == 0 ? "-" : string.Join(", ", names);
     }
 
+    //  cleans up object names
     private static string CleanName(string raw)
     {
         string name = raw.Replace("(Clone)", "").Trim();
@@ -164,6 +167,7 @@ private readonly List<Transform> pickerHeld = new List<Transform>();
         Refresh();
     }
 
+    // updates the TMP object with changes in the task
     private void Refresh()
     {
         StringBuilder text = new StringBuilder();
@@ -192,12 +196,14 @@ private readonly List<Transform> pickerHeld = new List<Transform>();
         hudText.text = text.ToString();
     }
 
+    // if we hold the litter picker, and it holds something else, this lets us see that its holding something too
     private void HandlePickerHeld(Transform item)
     {
         if (!pickerHeld.Contains(item)) pickerHeld.Add(item);
         Refresh();
     }
 
+    //  basically clears the thing when its off the litter picker
     private void HandlePickerReleased(Transform item)
     {
         pickerHeld.Remove(item);

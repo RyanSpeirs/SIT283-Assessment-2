@@ -74,7 +74,8 @@ public class LSystem : MonoBehaviour
         }
         return token;
     }
-
+    
+    // randomises the dimensions of the leafy blob bits of the tree
     private void SpawnLeaf(Vector3 position, Quaternion rotation)
     {
         GameObject leaf = Instantiate(leafBlob, position, rotation, transform);
@@ -85,6 +86,7 @@ public class LSystem : MonoBehaviour
         leaf.transform.localScale = new Vector3(scaleX, scaleY, scaleZ);
     }
 
+    // interprets the string sequence to procedurally generate our trees.
     private void Interpret(string tree)
     {
         Vector3 position = transform.position;

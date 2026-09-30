@@ -25,6 +25,7 @@ public class GraffitiTask : MonoBehaviour
         AddListeners(difficulty2Furniture);
     }
 
+    // ensures vandalised stuff is aware of changes.
     private void AddListeners(GameObject[] furniture)
     {
         foreach (GameObject obj in furniture)
@@ -39,6 +40,7 @@ public class GraffitiTask : MonoBehaviour
         }
     }
 
+    // When a round starts we want everything to be setup
     public void Begin(int difficulty)
     {
         activeFurniture.Clear();
@@ -71,6 +73,7 @@ public class GraffitiTask : MonoBehaviour
         Refresh();
     }
 
+    // Adds furniture to the task
     private void AddFurniture(GameObject[] furniture)
     {
         foreach (GameObject obj in furniture)
@@ -87,6 +90,7 @@ public class GraffitiTask : MonoBehaviour
         }
     }
 
+    // Resets everything for use at the start of a round
     private void ResetFurniture(GameObject[] furniture)
     {
         foreach (GameObject obj in furniture)
@@ -101,7 +105,7 @@ public class GraffitiTask : MonoBehaviour
         }
     }
 
-    //
+    // We use this to turn on the objects we're cleaning, and leave stuff that isn't as inactive and not graffiti'd
     private void SetFurnitureActive(GameObject[] furniture, bool active)
     {
         foreach (GameObject obj in furniture)

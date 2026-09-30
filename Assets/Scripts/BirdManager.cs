@@ -19,6 +19,7 @@ public class BirdManager : MonoBehaviour
     public Transform Player => player;
     public Item[] Litter => litter;
 
+    // uses camera as the reference point for player 
     void Awake()
     {
         if (player == null && Camera.main != null) player = Camera.main.transform;
@@ -26,17 +27,20 @@ public class BirdManager : MonoBehaviour
 
     void Start()
     {
+        // because birds are attracted to litter we need to know about litter
         litter = FindObjectsByType<Item>(FindObjectsSortMode.None);
         SetCount(startCount);
     }
 
     void Update()
     {
+        // just updates stuff including litter info
         if (Time.time < nextRefresh) return;
         litter = FindObjectsByType<Item>(FindObjectsSortMode.None);
         nextRefresh = Time.time + litterRefreshInterval;
     }
 
+    // adds birds based on the numbers set
     public void SetCount(int count)
     {
         while (birds.Count < count)

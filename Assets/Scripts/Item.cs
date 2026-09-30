@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+// this is an updated version of the one from week 1
+
 //  We keep this here to prevent script bloat
 public enum ItemType
 {
     DrinkCan,
     TakeawayBox,
-    PlasticPacket
+    PlasticBottle
 }
 
 public class Item : MonoBehaviour

@@ -1,7 +1,7 @@
 using UnityEngine;
 
-// Put this on a prefab with an AudioSource (clip assigned, Play On Awake off, Spatial Blend = 1).
-// The bin instantiates the prefab at its own position, the clip plays once, then the object removes itself.
+// This is hosted on two prefabs that are configured to play either a correct or incorrect sound.
+// The bin instantiates the audio prefab at its own position, the clip plays once, then the object removes itself.
 [RequireComponent(typeof(AudioSource))]
 public class OneShotAudio : MonoBehaviour
 {

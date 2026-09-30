@@ -13,6 +13,7 @@ public class StartScreen : MonoBehaviour
     [SerializeField] private LayerMask blockingMask = ~0;   // layers that block: bins, trees, terrain
     [SerializeField] private float clearRadius = 0.4f;
 
+    // tries to offset its position so it doesn't end up in tarrain
     private static readonly float[] candidateAngles = { 0f, 40f, -40f, 80f, -80f, 180f };
 
 
@@ -55,11 +56,13 @@ public class StartScreen : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(chosen);
     }
 
+    // hides when inactive
     public void Hide()
     {
         gameObject.SetActive(false);
     }
 
+    // updates when we interact
     private void Refresh()
     {
         int level = Mathf.Clamp(gameManager.Difficulty, 0, levelNames.Length - 1);

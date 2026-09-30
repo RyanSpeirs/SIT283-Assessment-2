@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+// this is an updated version of the one from week 1
 public class ItemBin : MonoBehaviour
 {
     // set capacity and item type, exposed to communicate type

@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // for the sake of in-editor testing we just skip the start screen and go into whatever difficult in the inspector
         #if UNITY_EDITOR
         if (skipStartScreen)
         {
@@ -41,23 +42,25 @@ public class GameManager : MonoBehaviour
         current?.Tick();
     }
 
-    // Called by the start screen buttons (and by the summary state)
+    // Called by the start screen buttons and the summary state
     public void SetDifficulty(int level)
     {
         Difficulty = Mathf.Clamp(level, 0, itemsPerDifficulty.Length - 1);
     }
 
+    //  changes game state to playing
     public void StartGame()
     {
         ChangeState(new PlayingState(this));
     }
 
-    // Also hook this to a "return to entrance" button if you want a way out mid-round
+    // Enables a restart of the game mid-round, not currently wired
     public void ReturnToStart()
     {
         ChangeState(new StartState(this, true));
     }
 
+    //  Changes state
     private void ChangeState(IGameState next)
     {
         current?.Exit();
@@ -65,11 +68,13 @@ public class GameManager : MonoBehaviour
         current.Enter();
     }
 
+    //  resets the bins
     private void ResetBins()
     {
         foreach (ItemBin bin in bins) bin.ResetBin();
     }
 
+    // basically forces the bin capacity to and the spawned items of that type to match
     private void MatchBinCapacities()
     {
         foreach (ItemBin bin in bins)
@@ -79,7 +84,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //  State machine for the game
+    //  Game state interface
     private interface IGameState
     {
         void Enter();
@@ -87,6 +92,7 @@ public class GameManager : MonoBehaviour
         void Exit();
     }
 
+    // the starting state for the game, shows the start UI.
     private class StartState : IGameState
     {
         private readonly GameManager gm;
@@ -114,6 +120,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // the gameplay state
     private class PlayingState : IGameState
     {
         private readonly GameManager gm;
@@ -151,6 +158,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // end of round state showing scores, crosses over with start game state 
     private class SummaryState : IGameState
     {
         private readonly GameManager gm;

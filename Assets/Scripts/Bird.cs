@@ -89,6 +89,7 @@ public class Bird : MonoBehaviour
             FlatDistance(transform.position, player.position) < scareDistance)
             StartFlee();
 
+        // Behavioural state machine
         switch (state)
         {
             case State.Flying:
@@ -139,6 +140,7 @@ public class Bird : MonoBehaviour
         AnimateWings();
     }
 
+    //  sets flight destination to randomise their paths
     private void PickNextFlightTarget()
     {
         if (Random.value < landChance && TryFindLandingSpot(out Vector3 spot))
@@ -149,6 +151,7 @@ public class Bird : MonoBehaviour
         else target = RandomPoint();
     }
 
+    // Birds flee if the play approaches, playing a flapping noise 
     private void StartFlee()
     {
         if (state == State.Grounded) PlayFlap();
@@ -163,6 +166,7 @@ public class Bird : MonoBehaviour
         velocity = (away.normalized + Vector3.up).normalized * mySpeed * fleeSpeedMultiplier * 0.5f;
     }
 
+    //  grounded bird flies 
     private void TakeOff()
     {
         state = State.Flying;
@@ -185,6 +189,7 @@ public class Bird : MonoBehaviour
         return best;
     }
 
+    //  searches for a landing spot with a high probability of picking litter, serving as a possible indicator of litter
     private bool TryFindLandingSpot(out Vector3 spot)
     {
         Item[] litter = Random.value < litterChance ? FindObjectsByType<Item>(FindObjectsSortMode.None): null;
@@ -234,6 +239,7 @@ public class Bird : MonoBehaviour
         return Vector3.Distance(a, b);
     }
 
+    // gives us random points for things
     private Vector3 RandomPoint()
     {
         Vector3 half = area.size * 0.5f;
@@ -244,6 +250,7 @@ public class Bird : MonoBehaviour
         return area.transform.TransformPoint(local);
     }
 
+    //  does what it says, animates the wings
     private void AnimateWings()
     {
         if (wingR == null || wingL == null) return;
@@ -258,12 +265,13 @@ public class Bird : MonoBehaviour
         wingL.localRotation = Quaternion.Euler(0f, 0f, -wingAngle);
     }
 
+    // randomises the interval between chirps
     private void ScheduleChirp()
     {
         nextChirpTime = Time.time + Random.Range(minChirpInterval, maxChirpInterval);
     }
 
-    //  There are extra limits here to limit the number of bird calls at once, it can get uncomfortable
+    //  There are extra limits here to limit the number of bird calls at once, it gets uncomfortable otherwise
     private void PlayChirp()
     {
         if (chirps == null || chirps.Length == 0)

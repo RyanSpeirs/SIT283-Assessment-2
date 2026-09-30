@@ -540,9 +540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BinDropToGround
   groundMask:
     serializedVersion: 2
-    m_Bits: 0
-  startHeight: 2
-  heightOffset: 0
+    m_Bits: 128
 --- !u!54 &1589869429560784698
 Rigidbody:
   m_ObjectHideFlags: 0

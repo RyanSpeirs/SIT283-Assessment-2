@@ -126,6 +126,7 @@ public class LitterPicker : MonoBehaviour
         OnItemHeld?.Invoke(held.transform);
     }
 
+    // when we press the let go button, it lets go
     public void Release()
     {
         if (held == null)
@@ -134,6 +135,7 @@ public class LitterPicker : MonoBehaviour
         RemoveHeldItem();
     }
 
+    // removes held item when called
     private void RemoveHeldItem()
     {
         Item item = held;
@@ -157,6 +159,7 @@ public class LitterPicker : MonoBehaviour
             Gizmos.DrawWireSphere(tip.position, pickRadius);
     }
 
+    // esnures that if an item is removed, say by ejection from the wrong bin, that it is cleared from the picker
     public void Drop(Item item)
     {
         if (item != null && item == held)

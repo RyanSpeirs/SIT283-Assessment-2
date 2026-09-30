@@ -9,6 +9,7 @@ public class Scrubber : MonoBehaviour
     [SerializeField] private float brushRadius = 0.2f;      // metres
     [SerializeField] private float minSlideSpeed = 0.01f;   // metres per second over the surface
 
+    // A struct for handling the contact and sponge stroke info
     private class Stroke
     {
         public Vector3 lastLocal;
@@ -27,12 +28,12 @@ public class Scrubber : MonoBehaviour
         if (graffitiMask.value == 0) graffitiMask = ~0;
     }
 
+    // Because we are touching physics we want FixedUpdate instead of regular or Late
     private void FixedUpdate()
     {
         foreach (Stroke st in strokes.Values) st.touched = false;
 
-        int count = Physics.OverlapSphereNonAlloc(tip.position, contactRadius, hits, graffitiMask,
-                                                  QueryTriggerInteraction.Ignore);
+        int count = Physics.OverlapSphereNonAlloc(tip.position, contactRadius, hits, graffitiMask, QueryTriggerInteraction.Ignore);
 
         for (int i = 0; i < count; i++)
         {

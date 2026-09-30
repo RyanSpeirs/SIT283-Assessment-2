@@ -5199,7 +5199,7 @@ MonoBehaviour:
   flightArea: {fileID: 1760475205}
   landingArea: {fileID: 146534991}
   player: {fileID: 1964602102}
-  startCount: 6
+  startCount: 8
   litterRefreshInterval: 2
 --- !u!114 &2143077018
 MonoBehaviour:
