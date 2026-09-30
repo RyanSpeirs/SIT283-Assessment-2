@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1808349908096211655}
   - component: {fileID: 5142968938865433944}
   - component: {fileID: 1067826225854002228}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4410412946805219671}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ejector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 8478957232313052476}
   - component: {fileID: 7241240316660202346}
   - component: {fileID: 7509008120886582638}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BinBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 5843391605885419602}
   - component: {fileID: 658885718284036129}
   - component: {fileID: 1094810033673311240}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 5197948378049968709}
   - component: {fileID: 6971793399074576156}
   - component: {fileID: 6424582454940484742}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -449,7 +449,7 @@ GameObject:
   - component: {fileID: -7504659084990028230}
   - component: {fileID: 1589869429560784698}
   - component: {fileID: 8698876170923539864}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PlasticBin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -723,7 +723,7 @@ GameObject:
   - component: {fileID: 514079514166063585}
   - component: {fileID: 6113584113942753972}
   - component: {fileID: 6644495603325283474}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -835,7 +835,7 @@ GameObject:
   - component: {fileID: 201799637323458711}
   - component: {fileID: 7878704488797559292}
   - component: {fileID: 3195609708897837077}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

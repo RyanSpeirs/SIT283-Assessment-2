@@ -1,76 +1,104 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
-// Goes on a grabbing tool that has an XR Grab Interactable component.
+// Goes on a litter-picking tool that has an XR Grab Interactable component.
 public class LitterPicker : MonoBehaviour
 {
     [SerializeField] private Transform tip;
     [SerializeField] private float pickRadius = 0.15f;
+    [SerializeField] private float regrabDelay = 0.75f;
+    private float nextGrabTime;
+    private bool wasActivating;
 
-    [Tooltip("On: press once to close, press again to release. Off: hold the trigger to keep hold.")]
-    [SerializeField] private bool toggleMode = true;
-
-    [Header("Jaw visuals (optional)")]
-    [SerializeField] private Transform jawA;
-    [SerializeField] private Transform jawB;
-    [SerializeField] private float openAngle = 25f;
-    [SerializeField] private float closedAngle = 2f;
-    [SerializeField] private float jawSpeed = 8f;
-    [SerializeField] private Vector3 jawAxis = Vector3.forward;   // the hinge axis in each jaw's own space
-    private Quaternion restA, restB;
+    private XRGrabInteractable grabInteractable;
+    private XRBaseInputInteractor holdingInteractor;
 
     private Item held;
-    private bool closed;
 
     public UnityEvent<Transform> OnItemHeld;
     public UnityEvent<Transform> OnItemReleased;
 
-    void Awake()
+    private void Awake()
     {
-        if (jawA != null) restA = jawA.localRotation;
-        if (jawB != null) restB = jawB.localRotation;
+        grabInteractable = GetComponent<XRGrabInteractable>();
     }
 
-
-    public void OnActivated()
+    private void Update()
     {
-        if (toggleMode && closed) Release();
-        else Grip();
-    }
+        UpdateHoldingInteractor();
 
-    public void OnDeactivated()
-    {
-        if (!toggleMode) Release();
-    }
-
-    void Update()
-    {
+        // Something else (a bin, for example) took the item off the tip
         if (held != null && held.transform.parent != tip)
         {
-            OnItemReleased?.Invoke(held.transform);
+            Item lost = held;
             held = null;
+            nextGrabTime = Time.time + regrabDelay;
+            OnItemReleased?.Invoke(lost.transform);
         }
 
-        float angle = closed ? closedAngle : openAngle;
-        RotateJaw(jawA, restA, angle);
-        RotateJaw(jawB, restB, -angle);
+        // Automatically pick up litter when the tip reaches it
+        if (held == null && Time.time >= nextGrabTime)
+        {
+            Item nearest = FindNearestItem();
+
+            if (nearest != null)
+                HoldItem(nearest);
+        }
+
+        // Release on the press of the Activate input, not while it is held
+        bool activating = holdingInteractor != null && holdingInteractor.shouldActivate;
+        if (activating && !wasActivating)
+            Release();
+        wasActivating = activating;
+
+        // If the player grabs the litter directly, the player takes priority
+        if (held != null)
+        {
+            XRGrabInteractable itemGrab = held.GetComponent<XRGrabInteractable>();
+
+            if (itemGrab != null && itemGrab.isSelected)
+                RemoveHeldItem();
+        }
     }
 
-
-    private void Grip()
+    private void UpdateHoldingInteractor()
     {
-        closed = true;
-        if (held != null) return;
+        holdingInteractor = null;
 
+        if (!grabInteractable.isSelected)
+            return;
+
+        foreach (var interactor in grabInteractable.interactorsSelecting)
+        {
+            if (interactor is XRBaseInputInteractor inputInteractor)
+            {
+                holdingInteractor = inputInteractor;
+                return;
+            }
+        }
+    }
+
+    private Item FindNearestItem()
+    {
         Item nearest = null;
         float nearestDistance = float.MaxValue;
 
         foreach (Collider hit in Physics.OverlapSphere(tip.position, pickRadius))
         {
             Item item = hit.GetComponentInParent<Item>();
-            if (item == null) continue;
 
-            float distance = Vector3.Distance(tip.position, item.transform.position);
+            if (item == null)
+                continue;
+            
+            XRGrabInteractable itemGrab = item.GetComponent<XRGrabInteractable>();
+            if (itemGrab != null && itemGrab.isSelected)
+                continue;
+
+            Vector3 closestPoint = hit.ClosestPoint(tip.position);
+            float distance = Vector3.Distance(tip.position, closestPoint);
+
             if (distance < nearestDistance)
             {
                 nearest = item;
@@ -78,38 +106,61 @@ public class LitterPicker : MonoBehaviour
             }
         }
 
-        if (nearest == null) return;
+        return nearest;
+    }
 
-        Rigidbody rb = nearest.GetComponent<Rigidbody>();
-        if (rb != null) rb.isKinematic = true;
-        nearest.transform.SetParent(tip, true);
-        held = nearest;
+    private void HoldItem(Item item)
+    {
+        if (held != null)
+            return;
+
+        Rigidbody rb = item.GetComponent<Rigidbody>();
+
+        if (rb != null)
+            rb.isKinematic = true;
+
+        item.transform.SetParent(tip, true);
+
+        held = item;
+
         OnItemHeld?.Invoke(held.transform);
     }
 
-    private void Release()
+    public void Release()
     {
-        closed = false;
-        if (held == null) return;
+        if (held == null)
+            return;
 
-        held.transform.SetParent(null, true);
-        OnItemReleased?.Invoke(held.transform);
-        Rigidbody rb = held.GetComponent<Rigidbody>();
-        if (rb != null) rb.isKinematic = false;
+        RemoveHeldItem();
+    }
+
+    private void RemoveHeldItem()
+    {
+        Item item = held;
+
         held = null;
+
+        item.transform.SetParent(null, true);
+
+        Rigidbody rb = item.GetComponent<Rigidbody>();
+
+        if (rb != null)
+            rb.isKinematic = false;
+
+        OnItemReleased?.Invoke(item.transform);
+        nextGrabTime = Time.time + regrabDelay;
     }
 
-    private void RotateJaw(Transform jaw, Quaternion rest, float angle)
+    private void OnDrawGizmosSelected()
     {
-        if (jaw == null) return;
-        Quaternion target = rest * Quaternion.AngleAxis(angle, jawAxis);
-        jaw.localRotation = Quaternion.Slerp(jaw.localRotation, target, Time.deltaTime * jawSpeed);
+        if (tip != null)
+            Gizmos.DrawWireSphere(tip.position, pickRadius);
     }
 
-    void OnDrawGizmosSelected()
+    public void Drop(Item item)
     {
-        if (tip != null) Gizmos.DrawWireSphere(tip.position, pickRadius);
+        if (item != null && item == held)
+            RemoveHeldItem();
     }
-
-
 }
+

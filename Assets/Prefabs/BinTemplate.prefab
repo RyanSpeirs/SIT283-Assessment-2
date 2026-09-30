@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6657059360230535416}
   - component: {fileID: 4518381419787494312}
   - component: {fileID: 8611690914450459770}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 5033960909745693170}
   - component: {fileID: 7520905878699478182}
   - component: {fileID: -6191632165937121328}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BinTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   capacity: 5
   correctSoundPrefab: {fileID: 0}
   wrongSoundPrefab: {fileID: 0}
-  ejectPoint: {fileID: 0}
+  ejectDistance: 0.8
   ejectSpeed: 2.5
   OnWrongItem:
     m_PersistentCalls:
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 7590757856668807524}
   - component: {fileID: 2127513476521210579}
   - component: {fileID: 5311877700974704675}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BinBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}

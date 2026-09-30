@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6970193827393083733}
   - component: {fileID: 8549584340467197395}
   - component: {fileID: 9094368327652648621}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AluminiumBin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 536181913831553638}
   - component: {fileID: 3790743410799978405}
   - component: {fileID: 4838815790500927323}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Panel (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -397,7 +397,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3130252597760733634}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ejector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -430,7 +430,7 @@ GameObject:
   - component: {fileID: 4687295990711184000}
   - component: {fileID: 4338550679702525411}
   - component: {fileID: 7092405963316430978}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BinTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -521,7 +521,7 @@ GameObject:
   - component: {fileID: 7847421245376764643}
   - component: {fileID: 3210598761489533678}
   - component: {fileID: 8607141698439604170}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -632,7 +632,7 @@ GameObject:
   - component: {fileID: 8015859352451791764}
   - component: {fileID: 702319396608355241}
   - component: {fileID: 3961076324787827134}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BinBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -723,7 +723,7 @@ GameObject:
   - component: {fileID: 4424812311037576636}
   - component: {fileID: 13719778390415998}
   - component: {fileID: 2951147794884453263}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Panel (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -835,7 +835,7 @@ GameObject:
   - component: {fileID: 7876522331616910784}
   - component: {fileID: 9015468064556102329}
   - component: {fileID: 6547787172132742203}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Panel (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

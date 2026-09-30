@@ -5,11 +5,13 @@ public class GameManager : MonoBehaviour
     [Header("Scene references")]
     [SerializeField] private StartScreen startScreen;
     [SerializeField] private TrashSpawner spawner;
+    [SerializeField] private GraffitiTask graffitiTask;
     [SerializeField] private UIHandler ui;
     [SerializeField] private ItemBin[] bins;
     [SerializeField] private Transform head;   // the Main Camera under the XR Origin
 
-    [Header("Items spawned at each difficulty (index 0 = easy)")]
+
+    [Header("Items spawned at each difficulty")]
     [SerializeField] private int[] itemsPerDifficulty = { 6, 10, 16 };
 
     [Header("Editor testing")]
@@ -77,7 +79,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //  State machine 
+    //  State machine for the game
     private interface IGameState
     {
         void Enter();
@@ -126,6 +128,9 @@ public class GameManager : MonoBehaviour
         {
             gm.spawnedCount = gm.spawner.Spawn(gm.itemsPerDifficulty[gm.Difficulty]);
             gm.MatchBinCapacities();
+
+            gm.graffitiTask.Begin(gm.Difficulty);
+
             gm.ui.Begin(gm.spawnedCount);
             gm.ui.Show(true);
         }
@@ -134,7 +139,7 @@ public class GameManager : MonoBehaviour
         {
             elapsed += Time.deltaTime;
 
-            if (gm.spawnedCount > 0 && gm.ui.TotalBinned >= gm.spawnedCount)
+            if (gm.spawnedCount > 0 && gm.ui.TotalBinned >= gm.spawnedCount && gm.graffitiTask.IsComplete)
             {
                 gm.ChangeState(new SummaryState(gm, elapsed));
             }
@@ -163,7 +168,7 @@ public class GameManager : MonoBehaviour
             int wrong = gm.ui.WrongAttempts;
             float accuracy = correct / (float)(correct + wrong);
 
-            // Simple adaptation: step up when the round went well, step down when it went poorly
+            // simple adaptation is step up when the round went well, step down when it went poorly
             int next = gm.Difficulty;
             if (accuracy >= 0.85f) next++;
             else if (accuracy < 0.5f) next--;
